@@ -103,6 +103,9 @@ module Kitchen
           :ssh_timeout => config[:ssh_timeout],
           :ssh_retries => config[:ssh_retries]
         })
+        Kitchen::SSH.new(*build_ssh_args(state)) do |conn|
+          run_remote("sudo mkdir -p /etc/chef/ohai/hints; sudo touch /etc/chef/ohai/hints/ec2.json", conn)
+        end
         print "(ssh ready)\n"
         debug("ec2:create '#{state[:hostname]}'")
       rescue Fog::Errors::Error, Excon::Errors::Error => ex
